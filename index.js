@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const {Circle, Square, Triangle} = require('./lib/shapes.js')
+const {Circle, Square, Triangle} = require('./lib/shapes.js');
 
 const questions = [
     {
@@ -28,31 +28,34 @@ const questions = [
 
 function renderShape(shape, colorChoice) {
     if (shape === "Circle") {
-        // return `<circle cx="25" cy="75" r="20" fill="${color}"/>`;
         const shape = new Circle();
         shape.setColor(colorChoice);
-        shape.render();
+        return shape.render();
     } else if (shape === "Square") {
-        return `<rect x="10" y="10" width="30" height="30" fill="${color}"/>`
+        const shape = new Square();
+        shape.setColor(colorChoice);
+        return shape.render();
     } else {
-        return `<polygon points="150, 18 244, 182 56, 182" fill="${color}"/>`
+        const shape = new Triangle();
+        shape.setColor(colorChoice);
+        return shape.render();
     };
 };
 
 function generateSVG(data) {
+    let yAxis = 125;
+    if (data.shape === "Triangle") {
+        yAxis = 160
+    };
     return `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-
-    ${renderShape(data.shape, data.shapeColor)}
-
-    <text x="150" y="125" font-size="60" text-anchor="middle" fill="${data.textColor}">${data.text}</text>
-
-    </svg>
-    `
+${renderShape(data.shape, data.shapeColor)}
+<text x="150" y="${yAxis}" font-size="80" text-anchor="middle" fill="${data.textColor}">${data.text}</text>
+</svg>`
 };
 
 function writeToFile(fileName, data) {
     const fileData = generateSVG(data);
-    fs.writeFile(fileName, fileData, (error) => error ? console.log(error) : console.log('Success'));
+    fs.writeFile(fileName, fileData, (error) => error ? console.log(error) : console.log('Generated logo.svg'));
 };
 
 function init() {
