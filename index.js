@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const shapes = require('./lib/shapes.js')
+const {Circle, Square, Triangle} = require('./lib/shapes.js')
 
 const questions = [
     {
@@ -26,9 +26,12 @@ const questions = [
     }
 ];
 
-function renderShape(shape, color) {
+function renderShape(shape, colorChoice) {
     if (shape === "Circle") {
-        return `<circle cx="25" cy="75" r="20" fill="${color}"/>`;
+        // return `<circle cx="25" cy="75" r="20" fill="${color}"/>`;
+        const shape = new Circle();
+        shape.setColor(colorChoice);
+        shape.render();
     } else if (shape === "Square") {
         return `<rect x="10" y="10" width="30" height="30" fill="${color}"/>`
     } else {
@@ -55,7 +58,12 @@ function writeToFile(fileName, data) {
 function init() {
     inquirer.prompt(questions)
     .then((answers) => {
-        writeToFile('logo.svg', answers)
+        if (answers.text.length > 3) {
+            console.log("please enter only between 1 and 3 characters")
+            init()
+        } else {
+            writeToFile('logo.svg', answers)
+        };
     });
 };
 init();
