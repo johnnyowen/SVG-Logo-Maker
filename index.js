@@ -1,7 +1,9 @@
+// Import necessary files
 const inquirer = require('inquirer');
 const fs = require('fs');
 const {Circle, Square, Triangle} = require('./lib/shapes.js');
 
+// Inquirer questions array
 const questions = [
     {
         type: "input",
@@ -26,6 +28,7 @@ const questions = [
     }
 ];
 
+// Renders shape from shapes.js per user choice
 function renderShape(shape, colorChoice) {
     if (shape === "Circle") {
         const shape = new Circle();
@@ -42,26 +45,32 @@ function renderShape(shape, colorChoice) {
     };
 };
 
+// Generates the SVG file core contents using the user input and shapes.js page
 function generateSVG(data) {
+    // centers text if a triangle background is chosen
     let yAxis = 125;
     if (data.shape === "Triangle") {
         yAxis = 160
     };
+    // The template literal of the SVG file
     return `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
 ${renderShape(data.shape, data.shapeColor)}
 <text x="150" y="${yAxis}" font-size="80" text-anchor="middle" fill="${data.textColor}">${data.text}</text>
 </svg>`
 };
 
+// Generated the SVG file itself
 function writeToFile(fileName, data) {
     const fileData = generateSVG(data);
     fs.writeFile(fileName, fileData, (error) => error ? console.log(error) : console.log('Generated logo.svg'));
 };
 
+// Init function 
 function init() {
     inquirer.prompt(questions)
     .then((answers) => {
-        if (answers.text.length > 3) {
+        // Restarts prompt if the user input less than 1 more than 3 characters
+        if (answers.text.length < 1 || answers.text.length > 3) {
             console.log("please enter only between 1 and 3 characters")
             init()
         } else {
