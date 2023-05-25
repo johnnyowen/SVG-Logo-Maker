@@ -13,12 +13,12 @@ const questions = [
     {
         type: "input",
         name: "textColor",
-        message: "LOGO TEXT COLOR: Enter a CSS color keyword OR hexadecimal number."  
+        message: "TEXT COLOR: Enter a CSS color keyword OR hexadecimal number."  
     },
     {
         type: "list",
         name: "shape",
-        message: "SHAPE: Choose a logo background shape.",
+        message: "LOGO BACKGROUND SHAPE: Choose a logo background shape.",
         choices: ["Circle", "Square", "Triangle"]
     },
     {
@@ -59,7 +59,7 @@ ${renderShape(data.shape, data.shapeColor)}
 </svg>`
 };
 
-// Generated the SVG file itself
+// Generates the SVG file itself
 function writeToFile(fileName, data) {
     const fileData = generateSVG(data);
     fs.writeFile(fileName, fileData, (error) => error ? console.log(error) : console.log('Generated logo.svg'));
